@@ -169,11 +169,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: 🔄 Convert repository name to lowercase
+        id: repo-name
+        run: echo "repo=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
       - name: 📝 Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ steps.repo-name.outputs.repo }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -189,8 +193,8 @@ jobs:
           file: docker/Dockerfile.dev
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:dev-${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:dev-latest
+            ${{ env.REGISTRY }}/${{ steps.repo-name.outputs.repo }}:dev-${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ steps.repo-name.outputs.repo }}:dev-latest
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
