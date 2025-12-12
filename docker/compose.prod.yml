@@ -11,4 +11,28 @@ services:
       - ../.env
     environment:
       - NODE_ENV=production
+      - S3_ENDPOINT=http://delineate-rustfs:9000
+      - S3_ACCESS_KEY_ID=rustfsadmin
+      - S3_SECRET_ACCESS_KEY=rustfsadmin
+      - S3_BUCKET_NAME=downloads
+      - S3_FORCE_PATH_STYLE=true
+    depends_on:
+      - delineate-rustfs
     restart: unless-stopped
+
+  delineate-rustfs:
+    image: rustfs/rustfs:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - RUSTFS_ROOT_USER=rustfsadmin
+      - RUSTFS_ROOT_PASSWORD=rustfsadmin
+    volumes:
+      - rustfs-data:/data
+      - rustfs-logs:/logs
+    restart: unless-stopped
+
+volumes:
+  rustfs-data:
+  rustfs-logs:
