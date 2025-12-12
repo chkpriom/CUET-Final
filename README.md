@@ -558,6 +558,165 @@ npm run docker:prod  # Start with Docker (production)
 - Path traversal prevention for S3 keys
 - Graceful shutdown handling
 
+---
+
+## CI/CD Pipeline
+
+![CI/CD Status](https://github.com/YOUR_USERNAME/cuet-micro-ops-hackthon-2025/workflows/CI/CD%20Pipeline/badge.svg)
+
+This project uses GitHub Actions for continuous integration and deployment. The pipeline automatically runs on every push and pull request to ensure code quality and correctness.
+
+### Pipeline Stages
+
+Our CI/CD pipeline consists of five stages:
+
+```
+┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
+│   Lint   │───▶│   Test   │───▶│ Security │───▶│  Build   │───▶│  Deploy  │
+│ ESLint + │    │   E2E    │    │ Trivy +  │    │  Docker  │    │(Optional)│
+│ Prettier │    │  Tests   │    │ CodeQL   │    │  Images  │    │          │
+└──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘
+```
+
+#### 🔍 Stage 1: Lint & Format Check
+
+- Runs ESLint to check code quality
+- Verifies code formatting with Prettier
+- Fast-fails on linting errors
+
+#### 🧪 Stage 2: E2E Tests
+
+- Executes comprehensive end-to-end test suite
+- Validates all API endpoints and functionality
+- Reports test results and coverage
+
+#### 🔒 Stage 3: Security Scanning
+
+- **Trivy**: Scans for vulnerabilities in dependencies and code
+- **CodeQL**: Performs static code analysis for security issues
+- Uploads results to GitHub Security tab
+
+#### 🐳 Stage 4: Build Docker Images
+
+- Builds both development and production Docker images
+- Pushes images to GitHub Container Registry (GHCR)
+- Uses layer caching for faster builds
+- Tags images with Git SHA and branch name
+
+#### 🚀 Stage 5: Deploy (Optional)
+
+- Automatically deploys to production on main branch
+- Supports platforms like Railway, Render, Fly.io
+- Requires configuration of deployment secrets
+
+### Features
+
+✅ **Automatic Triggers**
+
+- Runs on push to `main`/`master` branch
+- Runs on all pull requests
+- Supports manual workflow dispatch
+
+✅ **Performance Optimizations**
+
+- Dependency caching with GitHub Actions cache
+- Docker layer caching with GitHub Actions cache
+- Parallel job execution where possible
+
+✅ **Security**
+
+- Vulnerability scanning with Trivy
+- Static analysis with CodeQL
+- Automated security reports
+
+✅ **Notifications**
+
+- Build status visible in GitHub UI
+- Can be extended with Slack/Discord notifications
+
+### Running Tests Locally
+
+Before pushing your code, make sure to run tests locally to catch issues early:
+
+```bash
+# Install dependencies
+npm install
+
+# Run linting
+npm run lint
+
+# Fix linting issues automatically
+npm run lint:fix
+
+# Check code formatting
+npm run format:check
+
+# Format code automatically
+npm run format
+
+# Run E2E tests
+npm run test:e2e
+
+# Or run all checks at once
+npm run lint && npm run format:check && npm run test:e2e
+```
+
+### For Contributors
+
+When contributing to this project:
+
+1. **Before Committing**:
+
+   ```bash
+   # Make sure your code passes all checks
+   npm run lint
+   npm run format:check
+   npm run test:e2e
+   ```
+
+2. **Pull Request Process**:
+   - Create a feature branch: `git checkout -b feature/your-feature-name`
+   - Make your changes and commit: `git commit -m "feat: add new feature"`
+   - Push to your branch: `git push origin feature/your-feature-name`
+   - Open a pull request against `main` branch
+   - Wait for CI/CD checks to pass (all stages must be green ✅)
+   - Request review from maintainers
+
+3. **Commit Message Convention**:
+   - `feat:` - New features
+   - `fix:` - Bug fixes
+   - `docs:` - Documentation changes
+   - `style:` - Code style changes (formatting, etc.)
+   - `refactor:` - Code refactoring
+   - `test:` - Adding or updating tests
+   - `chore:` - Maintenance tasks
+
+4. **CI/CD Checks**:
+   - All pull requests must pass CI/CD checks before merging
+   - Fix any linting or test failures promptly
+   - Security vulnerabilities must be addressed
+
+### Pipeline Configuration
+
+The pipeline configuration is located at `.github/workflows/ci.yml`. Key features:
+
+- **Environment Variables**: Configured in workflow for test execution
+- **Secrets**: Use GitHub Secrets for sensitive data (API keys, tokens)
+- **Caching**: npm dependencies and Docker layers are cached
+- **Artifacts**: Test results are uploaded and retained for 7 days
+
+### Badge for Your README
+
+Add this badge to show your CI/CD status:
+
+```markdown
+![CI/CD Status](https://github.com/YOUR_USERNAME/cuet-micro-ops-hackthon-2025/workflows/CI/CD%20Pipeline/badge.svg)
+```
+
+Replace `YOUR_USERNAME` with your GitHub username.
+
+---
+
 ## License
 
 MIT

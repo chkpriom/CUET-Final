@@ -1,10 +1,10 @@
 /**
  * RustFS Bucket Initialization Script
- * 
+ *
  * This script initializes the RustFS S3-compatible storage by:
  * 1. Creating the required 'downloads' bucket if it doesn't exist
  * 2. Uploading a health check marker file for storage verification
- * 
+ *
  * Usage: node --experimental-transform-types scripts/init-rustfs.ts
  */
 
@@ -18,8 +18,7 @@ import {
 // Environment configuration
 const S3_ENDPOINT = process.env.S3_ENDPOINT ?? "http://localhost:9000";
 const S3_ACCESS_KEY_ID = process.env.S3_ACCESS_KEY_ID ?? "rustfsadmin";
-const S3_SECRET_ACCESS_KEY =
-  process.env.S3_SECRET_ACCESS_KEY ?? "rustfsadmin";
+const S3_SECRET_ACCESS_KEY = process.env.S3_SECRET_ACCESS_KEY ?? "rustfsadmin";
 const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME ?? "downloads";
 const S3_REGION = process.env.S3_REGION ?? "us-east-1";
 
